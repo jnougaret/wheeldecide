@@ -1,0 +1,28 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.wheel-container {
+    margin-right: 20px;
+}
+
+#wheelCanvas {
+    background-color: #f0f0f0; /* Light grey background to see the canvas */
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
