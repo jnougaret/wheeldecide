@@ -34,6 +34,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
+    
+    function gatherDataFromUI() {
+        const categories = document.querySelectorAll('.category-input');
+        const data = Array.from(categories).map(input => input.value.trim()).filter(value => value !== '');
+        return data;
+    }
+
+    function displayDataOnUI(data) {
+        const inputsContainer = document.querySelector('.inputs-container');
+        inputsContainer.innerHTML = ''; // Clear existing inputs
+        data.forEach(item => {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = item;
+            input.classList.add('category-input');
+            inputsContainer.appendChild(input);
+        });
+        createInputBox(); // Assuming you have this function to add an empty box at the end
+    }    
+
+    function saveCurrentList() {
+        const listName = document.getElementById('listName').value;
+        const data = gatherDataFromUI();  // Implement this function based on how you manage UI data
+        saveList(listName, data);
+    }
+    
+    function loadSelectedList() {
+        const listName = document.getElementById('listName').value;
+        loadList(listName, data => {
+            displayDataOnUI(data);  // Implement this to update your UI with the loaded data
+        });
+    }
+    
+    function deleteSelectedList() {
+        const listName = document.getElementById('listName').value;
+        deleteList(listName);
+    }    
 
     // Initial input box setup
     createInputBox();

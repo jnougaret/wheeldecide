@@ -7,3 +7,10 @@ service cloud.firestore {
     }
   }
 }
+
+{
+  "rules": {
+    ".read": "true",
+    ".write": "true"
+  }
+}
