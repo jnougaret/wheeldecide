@@ -7,42 +7,28 @@
     <link rel="stylesheet" href="styles.css">
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/10.11.1/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-app-compat.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/10.11.1/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/10.11.1/firebase-performance-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/13.7.5/firebase-performance-compat.js"></script>
     <!-- 
       initialize the SDK after all desired features are loaded, set useEmulator to false
       to avoid connecting the SDK to running emulators.
     -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script defer src="/__/firebase/init.js?useEmulator=false"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="wheel-container">
-          <canvas id="wheelCanvas" width="381" height="381"></canvas>
-      </div>
-      <div class="inputs-container">
-          <input type="text" class="category-input" placeholder="Add a category">
-      </div>
-      <div id="list-controls" class="save-container">
-          <input type="text" id="listName" placeholder="Enter list name">
-          <button onclick="saveCurrentList()">Save List</button>
-          <button onclick="loadSelectedList()">Load List</button>
-          <button onclick="deleteSelectedList()">Delete List</button>
-      </div> 
-    </div>
     <script type="module">
         // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.7.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.7.5/firebase-analytics.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
       
@@ -64,6 +50,20 @@
       </script>
     <script src="script.js"></script>
     <script src="firebase-actions.js"></script>
+    <div class="container">
+      <div class="wheel-container">
+          <canvas id="wheelCanvas" width="381" height="381"></canvas>
+      </div>
+      <div class="inputs-container">
+          <input type="text" class="category-input" placeholder="Add a category">
+      </div>
+      <div id="list-controls" class="save-container">
+          <input type="text" id="listName" placeholder="Enter list name">
+          <button onclick="saveCurrentList()">Save List</button>
+          <button onclick="loadSelectedList()">Load List</button>
+          <button onclick="deleteSelectedList()">Delete List</button>
+      </div> 
+    </div>
 
     <!-- <script>
       document.addEventListener('DOMContentLoaded', function() {
