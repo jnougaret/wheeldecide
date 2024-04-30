@@ -1,34 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
     const inputsContainer = document.querySelector('.inputs-container');
 
+    // Function to create a new input box
     function createInputBox() {
         const input = document.createElement('input');
         input.type = 'text';
         input.classList.add('category-input');
         input.placeholder = 'Add a category';
-        inputsContainer.appendChild(input);
         input.addEventListener('input', handleInput);
         input.addEventListener('blur', handleBlur);
+        inputsContainer.appendChild(input);
     }
 
+    // Handle input event on any input box
     function handleInput(event) {
-        const allInputs = Array.from(inputsContainer.querySelectorAll('.category-input'));
+        const allInputs = Array.from(document.querySelectorAll('.category-input'));
         const lastInput = allInputs[allInputs.length - 1];
-        // Ensure a new input is created only if it's the last input and there's text
-        if (event.target === lastInput && event.target.value.trim() && !lastInput.nextElementSibling) {
+        if (event.target === lastInput && event.target.value !== '') {
+            // Remove the event listener from the current last input
+            lastInput.removeEventListener('input', handleInput);
+            // Create a new input box
             createInputBox();
         }
     }
 
+    // Handle blur event to potentially remove input box
     function handleBlur(event) {
-        if (event.target.value.trim() === '') {
-            // Allow removal only if there is more than one input box
-            if (inputsContainer.children.length > 1) {
+        if (event.target.value === '') {
+            const allInputs = Array.from(document.querySelectorAll('.category-input'));
+            if (allInputs.length > 2) {
+                event.target.removeEventListener('blur', handleBlur);
                 event.target.remove();
             }
         }
     }
 
-    // Start with a single input box
+    // Initial input box setup
     createInputBox();
 });
