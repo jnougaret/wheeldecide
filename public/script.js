@@ -1,4 +1,27 @@
-function createInputBox() {
+export function createInputBox() {
+    // Handle input event on any input box
+    function handleInput(event) {
+        const allInputs = Array.from(document.querySelectorAll('.category-input'));
+        const lastInput = allInputs[allInputs.length - 1];
+        if (event.target === lastInput && event.target.value !== '') {
+            // Remove the event listener from the current last input
+            lastInput.removeEventListener('input', handleInput);
+            // Create a new input box
+            createInputBox();
+        }
+    }
+
+    // Handle blur event to potentially remove input box
+    function handleBlur(event) {
+        if (event.target.value === '') {
+            const allInputs = Array.from(document.querySelectorAll('.category-input'));
+            if (allInputs.length > 2) {
+                event.target.removeEventListener('blur', handleBlur);
+                event.target.remove();
+            }
+        }
+    }
+
     const input = document.createElement('input');
     input.type = 'text';
     input.classList.add('category-input');
@@ -7,29 +30,6 @@ function createInputBox() {
     input.addEventListener('input', handleInput);
     input.addEventListener('blur', handleBlur);
     inputsContainer.appendChild(input);
-}
-
-// Handle input event on any input box
-function handleInput(event) {
-    const allInputs = Array.from(document.querySelectorAll('.category-input'));
-    const lastInput = allInputs[allInputs.length - 1];
-    if (event.target === lastInput && event.target.value !== '') {
-        // Remove the event listener from the current last input
-        lastInput.removeEventListener('input', handleInput);
-        // Create a new input box
-        createInputBox();
-    }
-}
-
-// Handle blur event to potentially remove input box
-function handleBlur(event) {
-    if (event.target.value === '') {
-        const allInputs = Array.from(document.querySelectorAll('.category-input'));
-        if (allInputs.length > 2) {
-            event.target.removeEventListener('blur', handleBlur);
-            event.target.remove();
-        }
-    }
 }
 
 export function initializeInputs() {
@@ -55,6 +55,10 @@ export function initializeInputs() {
             const listName = document.getElementById('listName').value;  // Get the list name inside the function
             listsRef.child(listName).once('value', snapshot => {
                 const data = snapshot.val();
+                if (data === null) {
+                    console.log("No data found for the list name: " + listName);
+                    return;  // Early return if no data found
+                }
                 displayDataOnUI(data);  // Call displayDataOnUI to update the UI with loaded data
             });
         }
@@ -62,7 +66,16 @@ export function initializeInputs() {
         // Delete data
         function deleteSelectedList() {
             const listName = document.getElementById('listName').value;  // Get the list name inside the function
-            listsRef.child(listName).remove();
+            listsRef.child(listName).once('value', snapshot => {
+                const data = snapshot.val();
+                if (data !== null) {
+                    listsRef.child(listName).remove()
+                        .then(() => console.log("List deleted successfully."))
+                        .catch((error) => console.error("Error deleting list: ", error));
+                } else {
+                    console.log("No list found with the name: " + listName);
+                }
+            });
         }
  
         // Initial input box setup
