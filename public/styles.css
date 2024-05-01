@@ -31,6 +31,7 @@ body {
     padding: 8px;
     border: 2px solid #ccc;
     border-radius: 4px;
+    transition: border-color 0.3s;
 }
 
 .save-container {
