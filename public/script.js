@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
         input.type = 'text';
         input.classList.add('category-input');
         input.placeholder = 'Add a category';
+        input.name = 'categoryName[]'; 
         input.addEventListener('input', handleInput);
         input.addEventListener('blur', handleBlur);
         inputsContainer.appendChild(input);
     }
+
 
     // Handle input event on any input box
     function handleInput(event) {
