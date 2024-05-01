@@ -29,7 +29,7 @@
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
   </script>
-
+  
   <!-- Your HTML content -->
   <div class="container">
     <div class="wheel-container">
@@ -40,14 +40,15 @@
     </div>
     <div id="list-controls" class="save-container">
         <input type="text" id="listName" placeholder="Enter list name">
-        <button onclick="saveCurrentList()">Save List</button>
-        <button onclick="loadSelectedList()">Load List</button>
-        <button onclick="deleteSelectedList()">Delete List</button>
+        <button id="saveButton">Save List</button>
+        <button id="loadButton">Load List</button>
+        <button id="deleteButton">Delete List</button>
     </div> 
   </div>
+  <script type="module">
+    import { initializeInputs, gatherDataFromUI, displayDataOnUI } from './script.js';
 
-  <!-- Your Scripts -->
-  <script src="script.js"></script>
-  <script src="firebase-actions.js"></script>
+    initializeInputs(); // Initialize event listeners and input setup
+  </script>
 </body>
 </html>
