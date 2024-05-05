@@ -2,7 +2,13 @@
 const listsRef = firebase.database().ref('lists');
 const inputsContainer = document.querySelector('.inputs-container');
 
-function updatePieChart() {
+function selectRandomCategory() {
+    const nonEmptyCategories = Array.from(document.querySelectorAll('.category-input')).filter(input => input.value !== '');
+    const randomIndex = Math.floor(Math.random() * nonEmptyCategories.length);
+    return nonEmptyCategories[randomIndex];
+}
+
+function updatePieChart(highlightIndex = null) {
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const categories = Array.from(document.querySelectorAll('.category-input')).filter(input => input.value !== '');
@@ -14,12 +20,11 @@ function updatePieChart() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
     if (numCategories === 0) {
-        // Draw a circle with a black border when no categories are present
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, 0, 360);
+        ctx.closePath();
+        ctx.fill();
         return;
     }
 
@@ -27,25 +32,74 @@ function updatePieChart() {
     const anglePerCategory = (2 * Math.PI) / numCategories;
 
     categories.forEach((category, index) => {
+        const endAngle = startAngle + anglePerCategory;
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
-        let endAngle = startAngle + anglePerCategory;
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.closePath();
-        ctx.fillStyle = category.style.borderColor || getColor(index); 
+        ctx.fillStyle = category.style.borderColor;
+        if (index === highlightIndex) {
+            ctx.fillStyle = 'gold';  // Change the fill style for highlight
+        }
         ctx.fill();
-
-        startAngle = endAngle; // Update the start angle for the next slice
+        startAngle = endAngle;
     });
 }
 
 let availableColors = [
-    "rgb(141,211,199)", "rgb(255,255,179)", "rgb(190,186,218)",
-    "rgb(251,128,114)", "rgb(128,177,211)", "rgb(253,180,98)",
-    "rgb(179,222,105)", "rgb(252,205,229)", "rgb(217,217,217)",
-    "rgb(188,128,189)", "rgb(204,235,197)", "rgb(255,237,111)"
+    "rgb(141, 211, 199)", "rgb(255, 255, 179)", "rgb(190, 186, 218)",
+    "rgb(251, 128, 114)", "rgb(128, 177, 211)", "rgb(253, 180, 98)",
+    "rgb(179, 222, 105)", "rgb(252, 205, 229)", "rgb(217, 217, 217)",
+    "rgb(188, 128, 189)", "rgb(204, 235, 197)", "rgb(255, 237, 111)"
 ];
 let usedColors = [];
+
+function resetColors() {
+    availableColors = [
+        "rgb(141, 211, 199)", "rgb(255, 255, 179)", "rgb(190, 186, 218)",
+        "rgb(251, 128, 114)", "rgb(128, 177, 211)", "rgb(253, 180, 98)",
+        "rgb(179, 222, 105)", "rgb(252, 205, 229)", "rgb(217, 217, 217)",
+        "rgb(188, 128, 189)", "rgb(204, 235, 197)", "rgb(255, 237, 111)"
+    ];
+    usedColors = [];
+}
+
+let lastSelectedCategory = null;  // Store both element and original color
+
+function spinWheel() {
+    // Reset the style of the previously selected category
+    if (lastSelectedCategory) {
+        lastSelectedCategory.element.style.fontWeight = 'normal';
+        lastSelectedCategory.element.style.borderColor = lastSelectedCategory.originalColor;
+    }
+
+    const categories = Array.from(document.querySelectorAll('.category-input')).filter(input => input.value !== '');
+    const selectedCategory = selectRandomCategory();
+    const index = categories.indexOf(selectedCategory);
+    const numCategories = categories.length;
+    const totalSpins = numCategories * 2;  // Ensure at least two full spins
+    let currentHighlight = 0;
+    let spinsCompleted = 0;
+    let interval = 50;
+
+    const timer = setInterval(() => {
+        updatePieChart(currentHighlight);
+        currentHighlight = (currentHighlight + 1) % numCategories;
+        if (currentHighlight === 0) spinsCompleted++;  // Increment full spin count when a full cycle is completed
+
+        // Slow down the animation as it progresses
+        if (spinsCompleted >= 2 && currentHighlight === index) {
+            clearInterval(timer);
+            updatePieChart(index);  // Highlight the final category
+            selectedCategory.style.fontWeight = 'bold';  // Make the font weight bold
+            const originalColor = selectedCategory.style.borderColor;
+            selectedCategory.style.borderColor = 'gold';  // Change border to gold
+            lastSelectedCategory = { element: selectedCategory, originalColor: originalColor };  // Store the last selected
+        } else {
+            if (interval < 500) interval += 10;
+        }
+    }, interval);
+}
 
 function getColor() {
     if (availableColors.length > 0) {
@@ -100,17 +154,6 @@ function setColorForInput(input) {
     }
 }
 
-function resetColorPools() {
-    availableColors = [
-        "rgb(141,211,199)", "rgb(255,255,179)", "rgb(190,186,218)",
-        "rgb(251,128,114)", "rgb(128,177,211)", "rgb(253,180,98)",
-        "rgb(179,222,105)", "rgb(252,205,229)", "rgb(217,217,217)",
-        "rgb(188,128,189)", "rgb(204,235,197)", "rgb(255,237,111)"
-    ];
-    usedColors = [];
-}
-
-// Handle blur event to potentially remove input box
 function handleBlur(event) {
     const input = event.target;
     const allInputs = Array.from(document.querySelectorAll('.category-input'));
@@ -118,32 +161,13 @@ function handleBlur(event) {
 
     if (input.value === '' && input !== lastInput) {
         const color = input.style.borderColor;
-        if (color && usedColors.includes(color)) {
-            usedColors = usedColors.filter(c => c !== color);  // Remove color from used
-            availableColors.push(color);  // Return color to available
-        }
+        usedColors = usedColors.filter(c => c !== color);
+        availableColors.push(color);
         input.removeEventListener('input', handleInput);
         input.removeEventListener('blur', handleBlur);
-        input.remove();  // Remove the input element from the DOM
-        updatePieChart();  // Update the pie chart to reflect the change
+        input.remove();
+        updatePieChart();
     }
-}
-
-
-function deleteSelectedCategory(input) {
-    if (!input) return;  // Guard clause in case the input is undefined
-
-    const color = input.style.borderColor;
-    if (color && usedColors.includes(color)) {
-        usedColors = usedColors.filter(c => c !== color);  // Remove color from used
-        availableColors.push(color);  // Return color to available
-    }
-
-    input.removeEventListener('input', handleInput);
-    input.removeEventListener('blur', handleBlur);
-    input.remove();  // Remove the input element from the DOM
-
-    updatePieChart();  // Update the pie chart to reflect the change
 }
 
 function createInputBox() {
@@ -209,6 +233,7 @@ function loadSelectedList() {
         console.log("No list name provided for loading.");
         return;  // Prevent loading if no list name is provided
     }
+    resetColors();
     listsRef.child(listName).once('value', snapshot => {
         const data = snapshot.val();
         if (data === null) {
@@ -245,7 +270,6 @@ function initializeInputs() {
         document.querySelector('#deleteButton').addEventListener('click', deleteSelectedList);
 
         // Initial input box setup
-        resetColorPools();
         createInputBox();
         updatePieChart();
     });
