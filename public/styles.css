@@ -116,3 +116,11 @@ body {
     width: 100%;
     font-size: 12px;
 }
+
+.empty-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1; 
+}
