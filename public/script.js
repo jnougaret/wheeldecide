@@ -292,7 +292,6 @@ function initializeInputs() {
         document.getElementById('loadButton').addEventListener('click', loadSelectedList);
         // document.getElementById('deleteButton').addEventListener('click', deleteSelectedList);
         document.getElementById('spinButton').addEventListener('click', spinWheel);
-
         document.getElementById('listName').addEventListener('input', function() {
             var label = document.getElementById('inputLabel');
             if (this.value) {
@@ -300,8 +299,8 @@ function initializeInputs() {
             } else {
                 label.style.display = 'none';  // Hide label when input is empty
             }
-        });        
-
+        });
+        
         // Initial input box setup
         createInputBox();  // Assuming this function creates the first empty input box
         updatePieChart();  // This should draw the initial state of the pie chart
@@ -310,19 +309,3 @@ function initializeInputs() {
 
 // Call initializeInputs to set everything up
 initializeInputs();
-
-// function initializePage() {
-//     console.log("Page fully loaded and initialized.");
-//     window.addEventListener('load', function() {
-//         setTimeout(function() {
-//             document.body.style.padding = "10.1px";  // Slightly tweak a style property
-//             setTimeout(function() {
-//                 document.body.style.padding = "10px";  // Reset it back
-//             }, 50);
-//         }, 50);
-//     });
-// }
-
-// window.onload = function() {
-//     initializePage();
-// };
