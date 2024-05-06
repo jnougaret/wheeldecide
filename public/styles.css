@@ -3,7 +3,6 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
     padding: 10px; /* Add padding to prevent content from touching the edges */
     font-family: Arial, sans-serif;
     overflow: auto; /* Allows scrolling if content overflows */
@@ -33,12 +32,12 @@ body {
 }
 
 .save-container {
+    position: relative;
     display: flex;
-    flex-direction: row; /* Change to column on smaller screens if necessary */
+    flex-direction: column; /* Change to column on smaller screens if necessary */
     justify-content: space-around;
     flex-wrap: wrap; /* Allows items to wrap as needed on smaller screens */
     width: 100%;
-    width: 100%; /* Ensure container uses full width */
 }
 
 .save-container input {
@@ -51,12 +50,28 @@ body {
     margin-bottom: 5px;
 }
 
+.input-label {
+    position: absolute;
+    right: 10px;  /* Adjust based on padding of input */
+    display: none;  /* Initially hidden */
+    /* align-items: center;   */
+    justify-content: flex-end;  /* Align to the right */
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);  
+    pointer-events: none;  /* Allows click events to pass through to the input */
+}
+
+#listName {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
 .button-container {
     display: flex;
     justify-content: space-around; /* Space out buttons evenly */
     flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
     width: 100%; /* Full width to align with the input box above */
-    margin-bottom: 10px;
 }
 
 .button-container button {
@@ -96,3 +111,8 @@ body {
     width: 100%;
 }
 
+.message-display {
+    padding: 8px;
+    width: 100%;
+    font-size: 12px;
+}

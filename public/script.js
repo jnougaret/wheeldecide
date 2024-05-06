@@ -206,25 +206,26 @@ function gatherDataFromUI() {
 }
 
 function saveCurrentList() {
+    const messageDisplay = document.getElementById('messageDisplay');
     const listName = document.getElementById('listName').value;  // Get the list name inside the function
     if (!listName.trim()) {
-        console.log("No list name provided.");
+        messageDisplay.textContent = "No list name provided.";
         return;  // Prevent saving if list name is empty
     }
 
     listsRef.child(listName).once('value', snapshot => {
         if (snapshot.exists()) {
-            console.log("List name already exists and was not saved.");  // Log if the list already exists
+            messageDisplay.textContent = "List name already exists. Try another name.";
         } else {
             const data = gatherDataFromUI();  // Gather data from the UI
             if (data.length === 0) {
-                console.log("No data to save.");
+                messageDisplay.textContent = "No data to save.";
                 return;  // Prevent saving if there is no data
             }
             listsRef.child(listName).set(data).then(() => {
-                console.log("List was successfully saved.");  // Log on successful save
+                messageDisplay.textContent = "List was successfully saved.";
             }).catch(error => {
-                console.error("Error saving list:", error);  // Log any errors during save
+                messageDisplay.textContent = "Error saving list: " + error;
             });
         }
     });
@@ -245,37 +246,41 @@ function displayDataOnUI(data) {
 }
 
 function loadSelectedList() {
-    const listName = document.getElementById('listName').value;  // Get the list name inside the function
+    const messageDisplay = document.getElementById('messageDisplay');
+    const listName = document.getElementById('listName').value;
     if (!listName.trim()) {
-        console.log("No list name provided for loading.");
-        return;  // Prevent loading if no list name is provided
+        messageDisplay.textContent = "No list name provided for loading.";
+        return;
     }
-    resetColors();
+
     listsRef.child(listName).once('value', snapshot => {
-        const data = snapshot.val();
-        if (data === null) {
-            console.log("No data found for the list name: " + listName);
-            return;  // Early return if no data found
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            displayDataOnUI(data);
+            messageDisplay.textContent = "List loaded successfully.";
+        } else {
+            messageDisplay.textContent = "List not loaded. List name does not exist.";
         }
-        displayDataOnUI(data);  // Call displayDataOnUI to update the UI with loaded data
-        console.log("List successfully loaded.");  // Log successful loading of the list
     });
 }
 
 function deleteSelectedList() {
-    const listName = document.getElementById('listName').value;  // Get the list name inside the function
+    const messageDisplay = document.getElementById('messageDisplay');
+    const listName = document.getElementById('listName').value;
     if (!listName.trim()) {
-        console.log("No list name provided for deletion.");
-        return;  // Prevent deletion if no list name is provided
+        messageDisplay.textContent = "No list name provided for deletion.";
+        return;
     }
+
     listsRef.child(listName).once('value', snapshot => {
-        const data = snapshot.val();
-        if (data !== null) {
-            listsRef.child(listName).remove()
-                .then(() => console.log("List deleted successfully."))
-                .catch((error) => console.error("Error deleting list: ", error));
+        if (snapshot.exists()) {
+            listsRef.child(listName).remove().then(() => {
+                messageDisplay.textContent = "List deleted successfully.";
+            }).catch(error => {
+                messageDisplay.textContent = "Error deleting list.";
+            });
         } else {
-            console.log("No list found with the name: " + listName);
+            messageDisplay.textContent = "List not deleted. List name does not exist.";
         }
     });
 }
@@ -287,6 +292,15 @@ function initializeInputs() {
         document.getElementById('loadButton').addEventListener('click', loadSelectedList);
         document.getElementById('deleteButton').addEventListener('click', deleteSelectedList);
         document.getElementById('spinButton').addEventListener('click', spinWheel);
+
+        document.getElementById('listName').addEventListener('input', function() {
+            var label = document.getElementById('inputLabel');
+            if (this.value) {
+                label.style.display = 'flex';  // Show label when there is text
+            } else {
+                label.style.display = 'none';  // Hide label when input is empty
+            }
+        });        
 
         // Initial input box setup
         createInputBox();  // Assuming this function creates the first empty input box
