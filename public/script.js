@@ -290,7 +290,7 @@ function initializeInputs() {
         // Ensure event listeners are attached to the new button IDs
         document.getElementById('saveButton').addEventListener('click', saveCurrentList);
         document.getElementById('loadButton').addEventListener('click', loadSelectedList);
-        document.getElementById('deleteButton').addEventListener('click', deleteSelectedList);
+        // document.getElementById('deleteButton').addEventListener('click', deleteSelectedList);
         document.getElementById('spinButton').addEventListener('click', spinWheel);
 
         document.getElementById('listName').addEventListener('input', function() {
@@ -311,18 +311,18 @@ function initializeInputs() {
 // Call initializeInputs to set everything up
 initializeInputs();
 
-function initializePage() {
-    console.log("Page fully loaded and initialized.");
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            document.body.style.padding = "10.1px";  // Slightly tweak a style property
-            setTimeout(function() {
-                document.body.style.padding = "10px";  // Reset it back
-            }, 50);
-        }, 50);
-    });
-}
+// function initializePage() {
+//     console.log("Page fully loaded and initialized.");
+//     window.addEventListener('load', function() {
+//         setTimeout(function() {
+//             document.body.style.padding = "10.1px";  // Slightly tweak a style property
+//             setTimeout(function() {
+//                 document.body.style.padding = "10px";  // Reset it back
+//             }, 50);
+//         }, 50);
+//     });
+// }
 
-window.onload = function() {
-    initializePage();
-};
+// window.onload = function() {
+//     initializePage();
+// };
