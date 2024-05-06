@@ -311,11 +311,18 @@ function initializeInputs() {
 // Call initializeInputs to set everything up
 initializeInputs();
 
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        document.body.style.padding = "10.1px";  // Slightly tweak a style property
+function initializePage() {
+    console.log("Page fully loaded and initialized.");
+    window.addEventListener('load', function() {
         setTimeout(function() {
-            document.body.style.padding = "10px";  // Reset it back
+            document.body.style.padding = "10.1px";  // Slightly tweak a style property
+            setTimeout(function() {
+                document.body.style.padding = "10px";  // Reset it back
+            }, 50);
         }, 50);
-    }, 50);
-});
+    });
+}
+
+window.onload = function() {
+    initializePage();
+};
