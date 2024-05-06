@@ -32,11 +32,6 @@ body {
     align-items: center; /* Center children */
 }
 
-.save-container button, .save-container input {
-    width: calc(100% - 46px); /* Subtract padding to ensure fitting */
-    box-sizing: border-box; /* Padding and border included in width */
-}
-
 .save-container {
     display: flex;
     flex-direction: row; /* Change to column on smaller screens if necessary */
@@ -53,6 +48,7 @@ body {
     border: 2px solid #ccc;
     border-radius: 4px;
     min-width: 100px; /* Ensures buttons and inputs do not become too small */
+    margin-bottom: 5px;
 }
 
 .button-container {
@@ -60,11 +56,13 @@ body {
     justify-content: space-around; /* Space out buttons evenly */
     flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
     width: 100%; /* Full width to align with the input box above */
+    margin-bottom: 10px;
 }
 
 .button-container button {
     flex-grow: 1; /* Allows buttons to grow and fill the space */
     min-width: 100px; /* Minimum width for accessibility */
+    padding: 5px;
 }
 
 #wheelCanvas {
