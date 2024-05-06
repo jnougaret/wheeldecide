@@ -20,11 +20,19 @@ function updatePieChart(highlightIndex = null) {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
     if (numCategories === 0) {
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, 0, 360);
-        ctx.closePath();
-        ctx.fill();
+        // Draw a full pie chart using all 12 colors when no categories exist
+        let startAngle = 0;
+        const anglePerSlice = (2 * Math.PI) / availableColors.length;
+        availableColors.forEach((color, index) => {
+            const endAngle = startAngle + anglePerSlice;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+            startAngle = endAngle;
+        });
         return;
     }
 
@@ -71,6 +79,7 @@ function spinWheel() {
     if (lastSelectedCategory) {
         lastSelectedCategory.element.style.fontWeight = 'normal';
         lastSelectedCategory.element.style.borderColor = lastSelectedCategory.originalColor;
+        lastSelectedCategory.element.style.borderWidth = '2px';
     }
 
     const categories = Array.from(document.querySelectorAll('.category-input')).filter(input => input.value !== '');
@@ -95,8 +104,10 @@ function spinWheel() {
             const originalColor = selectedCategory.style.borderColor;
             selectedCategory.style.borderColor = 'gold';  // Change border to gold
             lastSelectedCategory = { element: selectedCategory, originalColor: originalColor };  // Store the last selected
+            // Update the display element with the selected category name
+            document.getElementById('selectedCategoryDisplay').textContent = `${selectedCategory.value}`;
         } else {
-            if (interval < 500) interval += 10;
+            if (interval < 500) interval += 30;
         }
     }, interval);
 }
@@ -171,6 +182,12 @@ function handleBlur(event) {
 }
 
 function createInputBox() {
+    const currentInputs = document.querySelectorAll('.category-input');
+    if (currentInputs.length >= 12) {
+        // Do not create more input boxes if the limit is reached
+        return;
+    }
+
     const input = document.createElement('input');
     input.type = 'text';
     input.classList.add('category-input');
@@ -265,13 +282,15 @@ function deleteSelectedList() {
 
 function initializeInputs() {
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('#saveButton').addEventListener('click', saveCurrentList);
-        document.querySelector('#loadButton').addEventListener('click', loadSelectedList);
-        document.querySelector('#deleteButton').addEventListener('click', deleteSelectedList);
+        // Ensure event listeners are attached to the new button IDs
+        document.getElementById('saveButton').addEventListener('click', saveCurrentList);
+        document.getElementById('loadButton').addEventListener('click', loadSelectedList);
+        document.getElementById('deleteButton').addEventListener('click', deleteSelectedList);
+        document.getElementById('spinButton').addEventListener('click', spinWheel);
 
         // Initial input box setup
-        createInputBox();
-        updatePieChart();
+        createInputBox();  // Assuming this function creates the first empty input box
+        updatePieChart();  // This should draw the initial state of the pie chart
     });
 }
 

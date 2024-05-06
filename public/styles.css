@@ -4,37 +4,97 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    padding: 10px; /* Add padding to prevent content from touching the edges */
     font-family: Arial, sans-serif;
+    overflow: auto; /* Allows scrolling if content overflows */
 }
 
 .container {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: auto; /* Center the container horizontally */
 }
 
 .wheel-container {
-    margin-right: 20px;
+    width: 100%; /* Full width for responsiveness */
+    display: flex;
+    justify-content: center; /* Center the canvas horizontally */
+}
+
+.inputs-container {
+    width: 100%; /* Ensure these elements also use full width */
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center; /* Center children */
+}
+
+.save-container button, .save-container input {
+    width: calc(100% - 46px); /* Subtract padding to ensure fitting */
+    box-sizing: border-box; /* Padding and border included in width */
+}
+
+.save-container {
+    display: flex;
+    flex-direction: row; /* Change to column on smaller screens if necessary */
+    justify-content: space-around;
+    flex-wrap: wrap; /* Allows items to wrap as needed on smaller screens */
+    width: 100%;
+    width: 100%; /* Ensure container uses full width */
+}
+
+.save-container input {
+    width: 100%; /* Same width as category input boxes */
+    flex: 1; /* Allows buttons and input to expand and take available space */
+    padding: 8px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    min-width: 100px; /* Ensures buttons and inputs do not become too small */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around; /* Space out buttons evenly */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    width: 100%; /* Full width to align with the input box above */
+}
+
+.button-container button {
+    flex-grow: 1; /* Allows buttons to grow and fill the space */
+    min-width: 100px; /* Minimum width for accessibility */
 }
 
 #wheelCanvas {
     background-color: #ffffff;
-}
-
-.inputs-container {
-    display: flex;
-    flex-direction: column;
+    width: 100%; /* Responsive canvas size */
+    max-width: 380px; /* Limit canvas size */
+    height: auto; /* Maintain aspect ratio */
+    aspect-ratio: 1; /* Maintain a square aspect ratio (supported in modern browsers) */
 }
 
 .category-input {
-    margin-bottom: 5px;
-    margin-right: 20px;
+    margin-top: 5px;
     padding: 8px;
     border: 2px solid #ccc;
     border-radius: 4px;
-    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box; 
 }
 
-.save-container {
+.selected-category {
+    text-align: center;
     margin-top: 10px;
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+.section-separator {
+    border: none;
+    height: 1px; 
+    background-color: #333;  
+    width: 100%;
 }
 

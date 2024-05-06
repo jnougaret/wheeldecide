@@ -32,19 +32,22 @@
   
   <!-- Your HTML content -->
   <div class="container">
-    <button onclick="spinWheel()">Spin the Wheel</button>
+    <button id="spinButton">Spin the Wheel</button>
+    <div class="selected-category" id="selectedCategoryDisplay"></div>
     <div class="wheel-container">
-        <canvas id="wheelCanvas" width="381" height="381"></canvas>
+        <canvas id="wheelCanvas" width="380" height="380"></canvas>
     </div>
     <div class="inputs-container">
-        <!-- <input type="text" id="categoryName" class="category-input" placeholder="Add a category"> -->
     </div>
-    <div id="list-controls" class="save-container">
-        <input type="text" id="listName" placeholder="Enter list name">
-        <button id="saveButton">Save List</button>
-        <button id="loadButton">Load List</button>
-        <button id="deleteButton">Delete List</button>
-    </div> 
+    <hr class="section-separator" />
+    <div class="save-container">
+      <input type="text" id="listName" placeholder="Enter list name">
+    </div>
+    <div class="button-container">
+      <button id="saveButton">Save List</button>
+      <button id="loadButton">Load List</button>
+      <button id="deleteButton">Delete List</button>
+    </div>
   </div>
   <script src="script.js"></script>
 </body>
