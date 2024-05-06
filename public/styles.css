@@ -1,11 +1,12 @@
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     height: 100vh;
-    padding: 10px; /* Add padding to prevent content from touching the edges */
+    padding: 10px; 
     font-family: Arial, sans-serif;
-    overflow: auto; /* Allows scrolling if content overflows */
+    overflow: auto; 
 }
 
 .container {
@@ -14,21 +15,21 @@ body {
     align-items: center;
     width: 100%;
     max-width: 600px;
-    margin: auto; /* Center the container horizontally */
+    margin: auto; 
 }
 
 .wheel-container {
-    width: 100%; /* Full width for responsiveness */
+    width: 100%; 
     display: flex;
-    justify-content: center; /* Center the canvas horizontally */
+    justify-content: center; 
 }
 
 .inputs-container {
-    width: 100%; /* Ensure these elements also use full width */
+    width: 100%; 
     display: flex;
     flex: 1;
     flex-direction: column;
-    align-items: center; /* Center children */
+    align-items: center; 
 }
 
 .save-container {
@@ -54,7 +55,6 @@ body {
     position: absolute;
     right: 10px;  /* Adjust based on padding of input */
     display: none;  /* Initially hidden */
-    /* align-items: center;   */
     justify-content: flex-end;  /* Align to the right */
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);  
