@@ -86,30 +86,37 @@ function spinWheel() {
     const selectedCategory = selectRandomCategory();
     const index = categories.indexOf(selectedCategory);
     const numCategories = categories.length;
-    const totalSpins = numCategories * 2;  // Ensure at least two full spins
+    if (numCategories === 0) { return; }
+
     let currentHighlight = 0;
     let spinsCompleted = 0;
-    let interval = 50;
+    let interval = 48;  // Starting interval
 
-    const timer = setInterval(() => {
+    function spinAnimation() {
         updatePieChart(currentHighlight);
         currentHighlight = (currentHighlight + 1) % numCategories;
-        if (currentHighlight === 0) spinsCompleted++;  // Increment full spin count when a full cycle is completed
-
-        // Slow down the animation as it progresses
-        if (spinsCompleted >= 2 && currentHighlight === index) {
-            clearInterval(timer);
-            updatePieChart(index);  // Highlight the final category
-            selectedCategory.style.fontWeight = 'bold';  // Make the font weight bold
-            const originalColor = selectedCategory.style.borderColor;
-            selectedCategory.style.borderColor = 'gold';  // Change border to gold
-            lastSelectedCategory = { element: selectedCategory, originalColor: originalColor };  // Store the last selected
-            // Update the display element with the selected category name
-            document.getElementById('selectedCategoryDisplay').textContent = `${selectedCategory.value}`;
+        if (currentHighlight === 0) spinsCompleted++;
+    
+        // Logically separate the end check from the action of stopping the animation
+        if (spinsCompleted >= 3 && currentHighlight === index) {
+            // Schedule the final update and then stop
+            setTimeout(() => {
+                updatePieChart(index);  // Update for the last time
+                selectedCategory.style.fontWeight = 'bold';
+                const originalColor = selectedCategory.style.borderColor;
+                selectedCategory.style.borderColor = 'gold';
+                lastSelectedCategory = { element: selectedCategory, originalColor: originalColor };
+                document.getElementById('selectedCategoryDisplay').textContent = `${selectedCategory.value}`;
+            }, interval);
         } else {
-            if (interval < 500) interval += 30;
+            // Continue with normal operation
+            if (spinsCompleted >= 1) interval += 6;  // Slow down the animation
+            setTimeout(spinAnimation, interval);  // Schedule the next execution
         }
-    }, interval);
+    }
+    
+    // Start the first execution
+    setTimeout(spinAnimation, interval);
 }
 
 function getColor() {
@@ -291,7 +298,7 @@ function initializeInputs() {
         document.getElementById('saveButton').addEventListener('click', saveCurrentList);
         document.getElementById('loadButton').addEventListener('click', loadSelectedList);
         // document.getElementById('deleteButton').addEventListener('click', deleteSelectedList);
-        document.getElementById('spinButton').addEventListener('click', spinWheel);
+        document.getElementById('wheelCanvas').addEventListener('click', spinWheel);
         document.getElementById('listName').addEventListener('input', function() {
             var label = document.getElementById('inputLabel');
             if (this.value) {
